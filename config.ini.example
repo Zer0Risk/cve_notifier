@@ -1,0 +1,24 @@
+; Rename to config.ini to use it
+[method]
+;sending methods can be added without a value, example:
+telegram =
+email =
+
+
+[telegram]
+bot_token 	=	<bot_token>
+chat_id		=	<chat_id>
+
+
+[email]
+smtp_server = smtp.example.io
+smtp_port = 25
+anonymous_login = False
+username = jeff
+password = thekiller
+sender = sender@example.io
+receiver = receiver@example.io
+
+
+[mattermost]
+webhook_url = https://service.io/hooks/42069666

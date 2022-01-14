@@ -1,0 +1,22 @@
+### Example File ###
+# Rename file to keywords.txt to use it
+# Keywords should be Frameworks/Software/OS/Hardware/Libraries that you use
+# Keywords need to be seperated by line breaks
+# Lines starting with # will be ignored
+# Case-insensitiv, keep it general (exp. use Windows Server not Windows Server 2012 R2)
+# Examples:
+# ------------- Examples Start ------------- #
+Netgear
+Fortigate
+Juniper
+Windows
+Windows Server
+Trend Micro
+Netapp
+Debian
+Ubuntu
+Apache
+Nginx
+Mattermost
+# ------------- Examples END ------------- #
+#

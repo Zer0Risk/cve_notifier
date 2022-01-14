@@ -1,0 +1,5 @@
+keywords.txt
+acknowledged_cves.txt
+config.ini
+cve_notifier.log
+.idea/**
