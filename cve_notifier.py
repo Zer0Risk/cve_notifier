@@ -80,16 +80,16 @@ def is_acknowledged_cve(cve_id):
 
 
 
-def get_cvss_rated_cves():
+def get_cvss_rated_cves(keyword_list):
     cves = []
     severity = ["HIGH", "CRITICAL"]
     while(True):
         try:
             for x in severity:
                 for cve_json in requests.get(f"https://services.nvd.nist.gov/rest/json/cves/1.0/?resultsPerPage=250&cvssV3Severity={x}").json()["result"]["CVE_Items"]:
-                    for keyword in get_keywords():
-                        if keyword in str(cve_json) and \
-                        datetime.datetime.strptime(cve_json["publishedDate"].split("T")[0], "%Y-%m-%d") > program_start:
+                    for keyword in keyword_list:
+                        if (keyword in str(cve_json) and \
+                        datetime.datetime.strptime(cve_json["publishedDate"].split("T")[0], "%Y-%m-%d") > program_start):
                             logging.debug(f'get_cvss_rated_cves() Found following CVE {cve_json["cve"]["CVE_data_meta"]["ID"]}')
                             cve_json["keyword"] = keyword
                             cves.append(cve_json)
@@ -205,7 +205,7 @@ def main():
         logging.info("main loop started")
         while(True):
             config.read("config.ini")
-            for cve in get_cvss_rated_cves():
+            for cve in get_cvss_rated_cves(get_keywords()):
                 for sending_method in config["method"].keys():
                     if( not is_acknowledged_cve(cve["cve"]["CVE_data_meta"]["ID"]+str(sending_method)) ):
                         if( send_message(sending_method, cve) != 1 ):
