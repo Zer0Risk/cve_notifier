@@ -39,6 +39,7 @@ def get_keywords():
                 keywords.append(lines.lower().strip())
                 keywords.append(lines.capitalize().strip())
                 keywords.append(lines.upper().strip())
+            logging.debug(f"get_keywords() returns following keywords: {keywords}")
             return keywords
 
     except FileNotFoundError as not_found:
