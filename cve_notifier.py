@@ -1,11 +1,11 @@
 #!/usr/local/bin/python3
 import traceback,time,configparser,smtplib,re,os,requests,json,datetime,urllib3,logging
 
-
+os.chdir(os.path.dirname(__file__))
 logging.basicConfig(filename="cve_notifier.log", encoding='utf-8', level=logging.DEBUG, format='%(asctime)s %(levelname)s %(message)s ', datefmt='%d.%m.%Y %H:%M:%S')
 config = configparser.ConfigParser()
-acknowledged_cves_full_path = os.path.dirname(__file__)+"\\acknowledged_cves.txt"
-keywords_full_path = os.path.dirname(__file__)+"\\keywords.txt"
+acknowledged_cves_file = "acknowledged_cves.txt"
+keywords_file = "keywords.txt"
 program_start = datetime.datetime.today()
 logging.info("cve_notifier started")
 
@@ -14,14 +14,14 @@ def get_keywords():
     keywords = []
     try:
         ### START Remove duplicate Spaces START ###
-        with open(keywords_full_path, "r") as file:
+        with open(keywords_file, "r") as file:
             file_content = file.read()
         file_content = re.sub(" {2,100}", " ", file_content)
-        with open(keywords_full_path, "w") as file:
+        with open(keywords_file, "w") as file:
             file.write(file_content)
         ### END Remove duplicate Spaces END ###
 
-        with open(keywords_full_path, "r") as file:
+        with open(keywords_file, "r") as file:
             for lines in file.readlines():
                 keyword_array = []
                 seperators = ["_", "-", "."]
@@ -42,7 +42,7 @@ def get_keywords():
             return keywords
 
     except FileNotFoundError as not_found:
-        with open(keywords_full_path, "w+") as file:
+        with open(keywords_file, "w+") as file:
             file.write("")
 
     except Exception:
@@ -52,22 +52,22 @@ def get_keywords():
 
 
 def acknowledge_cve(cve_id):
-    if(not os.path.exists(acknowledged_cves_full_path)):
-        with open(acknowledged_cves_full_path, "w+") as file:
+    if(not os.path.exists(acknowledged_cves_file)):
+        with open(acknowledged_cves_file, "w+") as file:
             file.write("")
 
-    with open(acknowledged_cves_full_path, "a+") as file:
+    with open(acknowledged_cves_file, "a+") as file:
         logging.info(f"Acknowledging following CVE: {cve_id}")
         file.write(cve_id+";")
 
 
 
 def is_acknowledged_cve(cve_id):
-    if (not os.path.exists(acknowledged_cves_full_path)):
-        with open(acknowledged_cves_full_path, "w+") as file:
+    if (not os.path.exists(acknowledged_cves_file)):
+        with open(acknowledged_cves_file, "w+") as file:
             file.write("")
 
-    with open(acknowledged_cves_full_path, "r") as file:
+    with open(acknowledged_cves_file, "r") as file:
         acknowledged_cves = file.read()
 
     for cve in acknowledged_cves.split(";"):
